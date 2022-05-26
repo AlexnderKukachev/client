@@ -1,5 +1,5 @@
 from aiohttp import web
-from funcs import random_sleep, service_down, service_up, write_log
+from funcs import random_sleep, service_down, service_up
 from datetime import datetime
 import atexit
 
@@ -8,7 +8,6 @@ routes = web.RouteTableDef()
 
 shutdown = True
 url = '/api'
-tasks_in_progress = 0
 
 
 # Проверка доступен ли сервис
@@ -23,20 +22,81 @@ async def status(request):
 # Маршрут для отправки задачи
 @routes.get('/api/task/{num}')
 async def work_task(request):
-    global tasks_in_progress
     task = f'task_{request.match_info["num"]}'
     if shutdown:
-        write_log(f'{task} - aborted\n', tasks_in_progress)
-        return web.Response(text=task, status=503)
-    tasks_in_progress += 1
-    write_log(f'{task} - in progress\n', tasks_in_progress)
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - in progress\n')
     await random_sleep()
-    tasks_in_progress -= 1
     if shutdown:
-        write_log(f'{task} - aborted\n', tasks_in_progress)
-        return web.Response(text=task, status=503)
-    write_log(f'{task} - done\n', tasks_in_progress)
-    return web.Response(text=task, status=200)
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - done\n')
+    return web.json_response(text=task, status=200)
+
+
+# Маршрут для отправки задачи
+@routes.post('/api/task/{num}')
+async def work_task(request):
+    task = f'task_{request.match_info["num"]}'
+    if shutdown:
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - in progress\n')
+    await random_sleep()
+    if shutdown:
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - done\n')
+    return web.json_response(text=task, status=200)
+
+
+# Маршрут для отправки задачи
+@routes.put('/api/task/{num}')
+async def work_task(request):
+    task = f'task_{request.match_info["num"]}'
+    if shutdown:
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - in progress\n')
+    await random_sleep()
+    if shutdown:
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - done\n')
+    return web.json_response(text=task, status=200)
+
+
+# Маршрут для отправки задачи
+@routes.delete('/api/task/{num}')
+async def work_task(request):
+    task = f'task_{request.match_info["num"]}'
+    if shutdown:
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - in progress\n')
+    await random_sleep()
+    if shutdown:
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - done\n')
+    return web.json_response(text=task, status=200)
+
+
+# Маршрут для отправки задачи
+@routes.patch('/api/task/{num}')
+async def work_task(request):
+    task = f'task_{request.match_info["num"]}'
+    if shutdown:
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - in progress\n')
+    await random_sleep()
+    if shutdown:
+        return web.json_response(text=task, status=503)
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: {task} - done\n')
+    return web.json_response(text=task, status=200)
 
 
 # Команда запуск сервиса
