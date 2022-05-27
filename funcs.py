@@ -23,15 +23,6 @@ def do_work(conn):
     with open('log.txt', 'a') as file:
         file.write(f'{datetime.now()}: total tasks in progress - {TASKS_IN_PROGRESS}\n')
 
-# def service_down():
-#     with open('log.txt', 'a') as file:
-#         file.write(f'{datetime.now()}: SERVICE TURNED OFF\n')
-#
-#
-# def service_up():
-#     with open('log.txt', 'w') as file:
-#         file.write(f'{datetime.now()}: SERVICE TURNED ON\n')
-
 
 def write_log(text: str, tip: int):
     with open('log.txt', 'a') as file:
