@@ -1,22 +1,36 @@
 import random
-from asyncio import sleep
+from time import sleep
 from datetime import datetime
+
+TASKS_IN_PROGRESS = 0
 
 
 # Функция задержки имитирующая работу сервиса
-async def random_sleep():
+def random_sleep():
     secs = random.uniform(0.1, 0.5)
-    await sleep(secs)
+    sleep(secs)
 
 
-def service_down():
+def do_work(conn):
+    global TASKS_IN_PROGRESS
+    TASKS_IN_PROGRESS += 1
     with open('log.txt', 'a') as file:
-        file.write(f'{datetime.now()}: SERVICE TURNED OFF\n')
+        file.write(f'{datetime.now()}: total tasks in progress - {TASKS_IN_PROGRESS}\n')
+    random_sleep()
+    conn.send('Task_done'.encode())
+    conn.close()
+    TASKS_IN_PROGRESS -= 1
+    with open('log.txt', 'a') as file:
+        file.write(f'{datetime.now()}: total tasks in progress - {TASKS_IN_PROGRESS}\n')
 
-
-def service_up():
-    with open('log.txt', 'w') as file:
-        file.write(f'{datetime.now()}: SERVICE TURNED ON\n')
+# def service_down():
+#     with open('log.txt', 'a') as file:
+#         file.write(f'{datetime.now()}: SERVICE TURNED OFF\n')
+#
+#
+# def service_up():
+#     with open('log.txt', 'w') as file:
+#         file.write(f'{datetime.now()}: SERVICE TURNED ON\n')
 
 
 def write_log(text: str, tip: int):

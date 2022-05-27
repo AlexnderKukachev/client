@@ -2,35 +2,35 @@ version: '3.7'
 
 services:
 
-  aiohttp-1:
+  socket-1:
     build: .
     restart: always
     mem_reservation: 200m
     ports:
       - "5001:5000"
 
-  aiohttp-2:
+  socket-2:
     build: .
     restart: always
     mem_reservation: 200m
     ports:
       - "5002:5000"
 
-  aiohttp-3:
+  socket-3:
     build: .
     restart: always
     mem_reservation: 200m
     ports:
       - "5003:5000"
 
-  aiohttp-4:
+  socket-4:
     build: .
     restart: always
     mem_reservation: 200m
     ports:
       - "5004:5000"
 
-  aiohttp-5:
+  socket-5:
     build: .
     restart: always
     mem_reservation: 200m
